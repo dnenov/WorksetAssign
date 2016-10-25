@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Command">
+    <Text>Command WorksetAssign</Text>
+    <Description>Assign all elements of a given type to a desired Workest</Description>
+    <Assembly>WorksetAssign.dll</Assembly>
+    <FullClassName>WorksetAssign.Command</FullClassName>
+    <ClientId>a9bc5161-189c-4cb9-a83f-79fb5ab3c942</ClientId>
+    <VendorId>TBC_</VendorId>
+    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
+  <!--<AddIn Type="Application">
+    <Name>Application WorksetAssign</Name>
+    <Assembly>WorksetAssign.dll</Assembly>
+    <FullClassName>WorksetAssign.App</FullClassName>
+    <ClientId>79420286-d9b0-482c-8ba3-da19cdb2643b</ClientId>
+    <VendorId>TBC_</VendorId>
+    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>-->
+</RevitAddIns>

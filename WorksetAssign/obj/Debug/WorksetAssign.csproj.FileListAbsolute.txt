@@ -1,0 +1,7 @@
+c:\users\dene\documents\visual studio 2015\Projects\WorksetAssign\WorksetAssign\bin\Debug\WorksetAssign.dll
+c:\users\dene\documents\visual studio 2015\Projects\WorksetAssign\WorksetAssign\bin\Debug\WorksetAssign.pdb
+c:\users\dene\documents\visual studio 2015\Projects\WorksetAssign\WorksetAssign\obj\Debug\WorksetAssign.csprojResolveAssemblyReference.cache
+c:\users\dene\documents\visual studio 2015\Projects\WorksetAssign\WorksetAssign\obj\Debug\WorksetAssign.ElementToWorkest.resources
+c:\users\dene\documents\visual studio 2015\Projects\WorksetAssign\WorksetAssign\obj\Debug\WorksetAssign.csproj.GenerateResource.Cache
+c:\users\dene\documents\visual studio 2015\Projects\WorksetAssign\WorksetAssign\obj\Debug\WorksetAssign.dll
+c:\users\dene\documents\visual studio 2015\Projects\WorksetAssign\WorksetAssign\obj\Debug\WorksetAssign.pdb
