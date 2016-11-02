@@ -23,6 +23,10 @@ namespace WorksetAssign
             {
                 try
                 {
+                    if (cat.Name.Contains("Tag"))
+                    {
+                        continue;    //no Tags
+                    }
                     mapper.Add(cat.Name, cat);
                 }
                 catch

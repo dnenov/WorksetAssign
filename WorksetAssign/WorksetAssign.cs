@@ -4,14 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace WorksetAssign
 {
     internal static class WorksetAssign
     {
-        private static string tName = "Workset Assign";
+        internal static string tName = "Workset Assign";
 
-        internal static void Assign(Document doc, WorksetId worksetId, string workset, Category cat, string category, out string message)
+        internal static void Assign(Document doc, WorksetId worksetId, string workset, Category cat, string category, ProgressBar progressBar, Label label, out string message)
         {
             List<Element> elements = recursiveElements(doc, cat);
             
@@ -24,6 +25,9 @@ namespace WorksetAssign
                 return;
             }
 
+            progressBar.Minimum = 0;
+            progressBar.Maximum = elements.Count;
+            
             using (Transaction t = new Transaction(doc, tName))
             {
                 FailureHandlingOptions foptions = t.GetFailureHandlingOptions();
@@ -31,8 +35,9 @@ namespace WorksetAssign
                 foptions.SetFailuresPreprocessor(fhandler);
                 foptions.SetClearAfterRollback(true);
                 t.SetFailureHandlingOptions(foptions);
-
+                
                 t.Start();
+
                 foreach (Element el in elements)
                 {
                     if (el.WorksetId.IntegerValue != worksetId.IntegerValue) //only convert if they are not in that workset
@@ -40,6 +45,9 @@ namespace WorksetAssign
                         if(el.get_Parameter(BuiltInParameter.ELEM_PARTITION_PARAM).IsReadOnly)
                         {
                             failed++;
+                            progressBar.Value++;
+                            label.Text = String.Format("Completed {0} of {1}", progressBar.Value.ToString(), progressBar.Maximum.ToString());
+                            label.Refresh();
                             continue;
                         }
                         try
@@ -52,6 +60,9 @@ namespace WorksetAssign
 
                         }
                     }
+                    progressBar.Value++;
+                    label.Text = String.Format("Completed {0} of {1}", progressBar.Value.ToString(), progressBar.Maximum.ToString());
+                    label.Refresh();
                 }
                 t.Commit();
             }
@@ -102,13 +113,45 @@ namespace WorksetAssign
         public FailureProcessingResult PreprocessFailures(
             FailuresAccessor failuresAccessor)
         {
+            IList<FailureResolutionType> resolutionTypeList = new List<FailureResolutionType>();
+
             IList<FailureMessageAccessor> failureMessages = failuresAccessor.GetFailureMessages();
 
-            if (failureMessages.Count > 0)
+            if (failureMessages.Count == 0)
             {
-                return FailureProcessingResult.ProceedWithRollBack;
+                return FailureProcessingResult.Continue;
             }
-            return FailureProcessingResult.Continue;
+            else
+            {
+                foreach (FailureMessageAccessor fma in failureMessages)
+                {
+                    // check how many resolutions types were attempted to try to prevent
+                    // entering infinite loop
+                    /*
+                    resolutionTypeList = failuresAccessor.GetAttemptedResolutionTypes(fma);
+                    FailureDefinitionId failId = fma.GetFailureDefinitionId();
+
+                    string failureName = fma.ToString();
+
+                    if(resolutionTypeList.Count >= 3)
+                    {
+                        return FailureProcessingResult.ProceedWithRollBack;
+                    }
+                    */
+                    FailureSeverity fsav = fma.GetSeverity();
+
+                    if (fsav == FailureSeverity.Warning)
+                    {
+                        failuresAccessor.DeleteWarning(fma);
+                    }
+                    else
+                    {
+                        failuresAccessor.ResolveFailure(fma);
+                        return FailureProcessingResult.ProceedWithRollBack;
+                    }
+                }
+                return FailureProcessingResult.Continue;
+            }         
         }
     }
 }

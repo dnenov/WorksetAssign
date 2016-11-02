@@ -38,9 +38,10 @@ namespace WorksetAssign
             worksetsComboBox.Items.AddRange(worksetMapper.Keys.ToArray());
         }
 
+        #region Main
         private void assignButton_Click(object sender, EventArgs e)
         {
-            if(worksetsComboBox.Text == "" || elementsComboBox.Text == "")
+            if (worksetsComboBox.Text == "" || elementsComboBox.Text == "")
             {
                 MessageBox.Show("Please assign Category and Workset values.");
             }
@@ -53,11 +54,13 @@ namespace WorksetAssign
                 string message = "";
                 string workset = worksetsComboBox.Text;
                 string category = elementsComboBox.Text;
-                WorksetAssign.Assign(doc, worksetMapper[workset], workset, categoriesMapper[category], category, out message);
-                MessageBox.Show(message);
+                WorksetAssign.Assign(doc, worksetMapper[workset], workset, categoriesMapper[category], category, progressBar, progressLabel, out message);
+                progressLabel.Text = message;
             }
         }
+        #endregion
 
+        #region Form Control
         private void doneButton_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.OK;
@@ -100,5 +103,7 @@ namespace WorksetAssign
             }
             return base.ProcessCmdKey(ref msg, keyData);
         }
+        #endregion
+
     }
 }
